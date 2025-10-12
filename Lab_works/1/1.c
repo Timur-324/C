@@ -1,3 +1,4 @@
+// TEST - How git and commits work
 #include <stdio.h>
 #include <math.h>
 // оговорочка, так как я использую тип int в функциях если num будет реально большое, то 
