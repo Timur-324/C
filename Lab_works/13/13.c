@@ -8,16 +8,10 @@ int is_valid(char str_num[], int sys_num)
     int value;
     while (*p)
     {
-        if (isdigit(*p))
-            value = *p - '0';
-        else if (isalpha(*p))
-            value = toupper(*p) - 'A' + 10;
-        else
-            return 0;
-
-        if (value >= sys_num)
-            return 0;
-
+        if (isdigit(*p)){value = *p - '0';}
+        else if (isalpha(*p)) {value = toupper(*p) - 'A' + 10;}
+        else {return 0;}
+        if (value >= sys_num){return 0;}
         p++;
     }
     return 1;
