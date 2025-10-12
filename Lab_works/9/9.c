@@ -1,12 +1,15 @@
 #include <stdio.h>
-#include <string.h>
 int reverse(char *str)
 {
     char *first_symbol_of_str, *last_symbol_of_str, temporal_storage;
-    int length_of_line;
     first_symbol_of_str = str;
-    length_of_line = strlen(str); 
-    last_symbol_of_str = str + length_of_line - 1;
+    last_symbol_of_str = str;
+
+    while (*last_symbol_of_str != 0)
+    {
+        last_symbol_of_str++;
+    }
+    last_symbol_of_str--;
 
     while(first_symbol_of_str < last_symbol_of_str)
     {

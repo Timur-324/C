@@ -2,15 +2,21 @@
 #include <string.h>
 
 
-char my_strcat(char *str1, char const *str2) 
+void my_strcat(char *str1, char const *str2) 
 {
-    int len1, len2;
-    len1 = strlen(str1);
-    len2 = strlen(str2);
-    for(int i = 0; i <= len2; i++)
+    int i = 0, j = 0;
+    while (str1[i] != '\0')
     {
-        str1[len1 + i] = str2[i]; 
+        i++;
     }
+
+    while (str2[j] != '\0')
+    {
+        str1[i] = str2[j];
+        i++;
+        j++;
+    }
+    str1[i] = '\0';
 }
 
 int main()

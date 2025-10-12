@@ -1,10 +1,15 @@
 #include <stdio.h> // в теории сюда ещё можно добавить другую библиотеку <gmp.h> для того, чтобы можно было возводить в ещё большую степень и с ещё большими числами. int не бесконечный и при больший конечных значениях в ответе может быть отрицательное число.
 int power_f(int num, int power)
 {
-    int result_of_multiplication = 1, i;
-    for(i = 1; i <= power; i++)
+    int result_of_multiplication = 1;
+    while(power != 0)
     {
-        result_of_multiplication *= num; 
+        if(power % 2 == 1)
+        {
+            result_of_multiplication *= num;
+        }
+        num *= num;
+        power /= 2;
     }
     return result_of_multiplication;
 }
