@@ -53,15 +53,15 @@ void aghm(double *arith, double *geom, double *harm, double *median, size_t coun
     //Пузырькова сортировка
     for (i = 0; i < count - 1; i++) 
     {
-    for (j = 0; j < count - i - 1; j++)
-        {
-            if (median_arr[j] > median_arr[j + 1])
+        for (j = 0; j < count - i - 1; j++)
             {
-                temp = median_arr[j];
-                median_arr[j] = median_arr[j + 1];
-                median_arr[j + 1] = temp;
+                if (median_arr[j] > median_arr[j + 1])
+                {
+                    temp = median_arr[j];
+                    median_arr[j] = median_arr[j + 1];
+                    median_arr[j + 1] = temp;
+                }
             }
-        }
     }
 
     if (count % 2 == 0)
