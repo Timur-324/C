@@ -3,21 +3,35 @@
 
 // typedef int student; - тут по сути даю другое название типу int
 
-struct sudent //fist variant on how to use struct
+typedef struct 
 {
     char name[50];
     char id[10];
     int age;
     int grades[5];
 
-};
+}student; //дал название student всей структуре
+
+void print_el_of_struct(student student) //второй student это 
+{
+    printf("Name: %s\n", student.name);
+    printf("ID: %s\n", student.id);
+    printf("Age: %d\n", student.age);
+    printf("Grades: ");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("%d ", student.grades[i]);
+    }
+    printf("\n");
+}
+
+
 
 int main()
 {
-    struct student Timur;
+    student Timur;
 
     Timur.age = 17;
-
     strcpy(Timur.name, "Timur");
     strcpy(Timur.id, "0001");
     Timur.grades[0] = 4;
@@ -26,15 +40,5 @@ int main()
     Timur.grades[3] = 4;
     Timur.grades[4] = 5;
 
-    printf("Name: %s\n", Timur.name);
-    printf("ID: %s\n", Timur.id);
-    printf("Age: %d\n", Timur.age);
-    printf("Grades: ");
-    for(int i = 0; i < 5; i++)
-    {
-        printf("%d ", Timur.grades[i]);
-    }
-    printf("\n");
-
-
+    print_el_of_struct(Timur);
 }
