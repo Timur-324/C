@@ -1,19 +1,9 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
-#include <limits.h>
-#include <time.h>
-#include <ctype.h>
-#include <locale.h>
-#include <stdarg.h>
 #include <string.h>
+#include <stdarg.h>
 
-
-
-void tuned_free_all(
-    void** to_free,
-    ...);
-
+// Структура студента
 typedef struct student
 {
     char *surname;
@@ -22,115 +12,83 @@ typedef struct student
     size_t age;
     char sex;
     char *group_name;
-} student, stud, *p_student;
+} student, *p_student;
 
-void free_student(
-    p_student stud_ptr)
+// Универсальная функция освобождения памяти и обнуления указателей
+void tuned_free_all(void **to_free, ...) 
 {
-    tuned_free_all((void **)&stud_ptr->surname, &stud_ptr->name, &stud_ptr->patronymic, &stud_ptr->group_name, NULL);
-}
-
-
-void free_all(
-    void* to_free,
-    ...)
-{
-    if (to_free == NULL)
-    {
-        return;
-    }
-
-    free(to_free);
-
-    va_list va;
-    va_start(va, to_free);
-    void *from_va;
-
-    while ((from_va = va_arg(va, void*)) != NULL)
-    {
-        free(from_va);
-    }
-}
-
-void tuned_free_all(
-    void **to_free,
-    ...)
-{
-    if (to_free == NULL)
-    {
-        return;
-    }
+    if (!to_free) return;
 
     free(*to_free);
     *to_free = NULL;
 
     va_list va;
     va_start(va, to_free);
-    void** from_va;
-
-    while ((from_va = va_arg(va, void**)) != NULL)
-    {
+    void **from_va;
+    while ((from_va = va_arg(va, void**)) != NULL) {
         free(*from_va);
         *from_va = NULL;
     }
+    va_end(va);
 }
 
-int main(
-    int argc,
-    char* argv[])
+// Освобождение всех полей структуры student
+void free_student(p_student stud_ptr) {
+    if (!stud_ptr) return;
+    tuned_free_all(
+        (void **)&stud_ptr->surname,
+        &stud_ptr->name,
+        &stud_ptr->patronymic,
+        &stud_ptr->group_name,
+        NULL
+    );
+}
+
+// Удобная функция для инициализации строки в динамической памяти
+// Возвращает 0 — успех, 1 — ошибка (память не выделена)
+int init_string_at_heap(char **to_init, const char *source) 
 {
-    student stud_instance;
+    if (!to_init || !source) return 1;
+    *to_init = malloc(strlen(source) + 1);
+    if (!*to_init) return 1;
+    strcpy(*to_init, source);
+    return 0;
+}
+
+int main(void) {
+    student stud_instance = {0}; // Надежная инициализация нулями
+
+    // Инициализация полей. Проверка ошибок на каждом этапе.
+    if (init_string_at_heap(&stud_instance.surname, "Sadykov") != 0) {
+        puts("Ошибка выделения памяти для фамилии.");
+        return 1;
+    }
+    if (init_string_at_heap(&stud_instance.name, "Timur") != 0) {
+        free_student(&stud_instance);
+        puts("Ошибка выделения памяти для имени.");
+        return 1;
+    }
+    if (init_string_at_heap(&stud_instance.patronymic, "Eduardovich") != 0) {
+        free_student(&stud_instance);
+        puts("Ошибка выделения памяти для отчества.");
+        return 1;
+    }
+    if (init_string_at_heap(&stud_instance.group_name, "ITPM-125") != 0) {
+        free_student(&stud_instance);
+        puts("Ошибка выделения памяти для группы.");
+        return 1;
+    }
+
     stud_instance.age = 17;
+    stud_instance.sex = 'M'; // Для примера, корректный символ
 
-    stud_instance.surname = (char *)malloc(sizeof(char) * (strlen("Sadykov") + 1));
-    if (stud_instance.surname == NULL)
-    {
-        return 1;
-    }
-    strcpy(stud_instance.surname, "Sadykov");
+    // Пример использования:
+    printf("ФИО: %s %s %s\n", stud_instance.surname, stud_instance.name, stud_instance.patronymic);
+    printf("Возраст: %zu\n", stud_instance.age);
+    printf("Группа: %s\n", stud_instance.group_name);
 
-    stud_instance.name = (char*)malloc(sizeof(char) * (strlen("Timur") + 1));
-    if (stud_instance.name == NULL)
-    {
-        free(stud_instance.surname);
-        return 1;
-    }
-    strcpy(stud_instance.surname, "Timur");
-
-    stud_instance.patronymic = (char*)malloc(sizeof(char) * (strlen("Eduardovich") + 1));
-    if (stud_instance.patronymic == NULL)
-    {
-        // free(stud_instance.surname);
-        // free(stud_instance.name);
-        free_all(stud_instance.surname, stud_instance.name, NULL);
-        return 1;
-    }
-    strcpy(stud_instance.surname, "Eduardovich");
-
-    stud_instance.group_name = (char*)malloc(sizeof(char) * (strlen("ITPM-125") + 1));
-    if (stud_instance.group_name == NULL)
-    {
-        // free(stud_instance.surname);
-        // free(stud_instance.name);
-        // free(stud_instance.patronymic);
-        free_all(stud_instance.surname, stud_instance.name, stud_instance.patronymic, NULL);
-        return 1;
-    }
-    strcpy(stud_instance.surname, "ITPM-125");
-
-    stud_instance.sex = 52;
-
-    printf("sizeof(puk_srenjk) == %u\n", sizeof(struct puk_srenjk));
-    printf("sum of sizeofs of char and int == %u", sizeof(char) + sizeof(int));
-
+    // Освобождение памяти централизовано
     free_student(&stud_instance);
-
-    // TODO: usage of initialized struct instance...
-
-    // TODO: make this at home
-    // int init_string_at_heap(
-    //    char** to_init,
-    //    char const* source);
 
     return 0;
 }
