@@ -92,7 +92,7 @@ int insert_by_index_into_dynamic_array(
         to_insert_into->values[i + 1] = to_insert_into->values[i];
     }
 
-    to_insert_into->values[index] = value_to_insert;
+    to_insert_into->values[index] = *value_to_insert;
     to_insert_into->virtual_size++;
 
     return 0;
