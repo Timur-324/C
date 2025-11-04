@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-// Структура студента
+
 typedef struct student
 {
     char *surname;
@@ -14,7 +14,7 @@ typedef struct student
     char *group_name;
 } student, *p_student;
 
-// Универсальная функция освобождения памяти и обнуления указателей
+
 void tuned_free_all(void **to_free, ...) 
 {
     if (!to_free) return;
@@ -32,8 +32,9 @@ void tuned_free_all(void **to_free, ...)
     va_end(va);
 }
 
-// Освобождение всех полей структуры student
-void free_student(p_student stud_ptr) {
+//Освобождение памяти структуры student
+void free_student(p_student stud_ptr) 
+{
     if (!stud_ptr) return;
     tuned_free_all(
         (void **)&stud_ptr->surname,
@@ -44,50 +45,58 @@ void free_student(p_student stud_ptr) {
     );
 }
 
-// Удобная функция для инициализации строки в динамической памяти
-// Возвращает 0 — успех, 1 — ошибка (память не выделена)
+
 int init_string_at_heap(char **to_init, const char *source) 
 {
     if (!to_init || !source) return 1;
-    *to_init = malloc(strlen(source) + 1);
+    
+    *to_init = (char *)malloc(strlen(source) + 1);
+
     if (!*to_init) return 1;
+    
     strcpy(*to_init, source);
     return 0;
 }
 
-int main(void) {
-    student stud_instance = {0}; // Надежная инициализация нулями
+int main()
+{
+    student stud_instance;
 
-    // Инициализация полей. Проверка ошибок на каждом этапе.
-    if (init_string_at_heap(&stud_instance.surname, "Sadykov") != 0) {
-        puts("Ошибка выделения памяти для фамилии.");
-        return 1;
+    if (init_string_at_heap(&stud_instance.surname, "Sadykov") != 0) 
+    {
+        printf("Error! Can not allocate memory for surname.");
+        return -1;
     }
-    if (init_string_at_heap(&stud_instance.name, "Timur") != 0) {
+    
+    if (init_string_at_heap(&stud_instance.name, "Timur") != 0) 
+    {
         free_student(&stud_instance);
-        puts("Ошибка выделения памяти для имени.");
-        return 1;
+        printf("Error! Can not allocate memory for name.");
+        return -2;
     }
-    if (init_string_at_heap(&stud_instance.patronymic, "Eduardovich") != 0) {
+    
+    if (init_string_at_heap(&stud_instance.patronymic, "Eduardovich") != 0)
+    {
         free_student(&stud_instance);
-        puts("Ошибка выделения памяти для отчества.");
-        return 1;
+        printf("Error! Can not allocate memory for patronymic.");
+        return -3;
     }
-    if (init_string_at_heap(&stud_instance.group_name, "ITPM-125") != 0) {
+    
+    if (init_string_at_heap(&stud_instance.group_name, "ITPM-125") != 0) 
+    {
         free_student(&stud_instance);
-        puts("Ошибка выделения памяти для группы.");
-        return 1;
+        printf("Error! Can not allocate memory for group.");
+        return -4;
     }
 
     stud_instance.age = 17;
-    stud_instance.sex = 'M'; // Для примера, корректный символ
+    stud_instance.sex = 'M';
 
-    // Пример использования:
-    printf("ФИО: %s %s %s\n", stud_instance.surname, stud_instance.name, stud_instance.patronymic);
-    printf("Возраст: %zu\n", stud_instance.age);
-    printf("Группа: %s\n", stud_instance.group_name);
 
-    // Освобождение памяти централизовано
+    printf("SNP: %s %s %s\n", stud_instance.surname, stud_instance.name, stud_instance.patronymic);
+    printf("Age: %zu\n", stud_instance.age);
+    printf("Group: %s\n", stud_instance.group_name);
+
     free_student(&stud_instance);
 
     return 0;
