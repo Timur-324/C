@@ -18,9 +18,10 @@ int is_valid(char str_num[], int sys_num)
 }
 
 
-void converter(char str_num[], int sys_num, int *result) 
+void converter(char *str_num, int sys_num, int *result) 
 {
-    char *p = str_num;
+    char *p;
+    p = str_num;
     while (*p) 
     {
         *result = *result * sys_num + (isalpha(*p) ? *p - 'A' + 10 : *p - '0');
