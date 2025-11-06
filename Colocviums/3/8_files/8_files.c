@@ -237,5 +237,27 @@ int main()
 //  Возвращает указатель файла на начало.
 //
 //  - Пример: rewind(file);
-    return 0;
-}
+
+
+
+// Ilya Sergeevich
+// open file with existence check
+// FILE *f;
+// if (!(f = fopen(file_path, file_mode)))
+// {
+//     // TODO
+// }
+// file reading loop (with EOF handling)
+// char c;
+// while (!feof(f))
+// {
+//     c = fgetc(f);
+//     // TODO: handle read character/byte
+// }
+// file reading loop (without EOF handling)
+// char c;
+// while ((c = fgetc(f)) != EOF)
+// {
+//     // TODO: handle read character/byte
+// }
+return 0;
