@@ -1,0 +1,5 @@
+to compile:
+gcc 7.c -o 7
+
+to run:
+./7 /home/t324/Desktop/Project/C/Labs/Lab_3/7_length/lengths.txt
